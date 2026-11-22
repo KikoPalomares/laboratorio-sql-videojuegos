@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F5F2EC">
+<title>Reto 1 · Laboratorio SQL</title>
+<style>
+:root {
+  color-scheme: light;
+  --accent: #E93A01;
+  --graphite: #191919;
+  --warm-white: #F5F2EC;
+  --paper: #FFFFFF;
+  --muted: #67645F;
+  --line: #E4DED6;
+  --soft: #F8F6F2;
+  --success: #25684A;
+  --error: #9A2D16;
+  --shadow: 0 12px 36px rgba(25, 25, 25, .055);
+  font-family: "Avenir Next", Avenir, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--graphite);
+  background: var(--warm-white);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+* { box-sizing: border-box; }
+html, body { width: 100%; min-width: 1200px; height: 100%; min-height: 760px; margin: 0; overflow: hidden; }
+body { background: var(--warm-white); }
+button, textarea { font: inherit; }
+.topbar {
+  height: 94px;
+  display: flex;
+  align-items: center;
+  padding: 0 56px;
+  position: relative;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--graphite);
+  font-size: 20px;
+  font-weight: 760;
+  letter-spacing: .045em;
+}
+.brand-mark { width: 11px; height: 11px; background: var(--accent); border-radius: 2px; transform: rotate(45deg); }
+.brand-divider { color: #AAA39B; font-weight: 450; }
+.brand-section { color: #57534E; font-weight: 620; letter-spacing: .065em; }
+/* Zona reservada para la marca de agua: 283 × 50 px, margen superior y derecho de 32 px. */
+.watermark-safe-zone { position: absolute; top: 32px; right: 32px; width: 283px; height: 50px; pointer-events: none; }
+.page-main {
+  height: calc(100% - 150px);
+  padding: 10px 56px 18px;
+  display: grid;
+  grid-template-rows: 145px minmax(0, 1fr);
+  gap: 17px;
+}
+.intro { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.eyebrow { color: var(--accent); font-size: 18px; line-height: 1.2; font-weight: 780; letter-spacing: .12em; margin: 0 0 10px; }
+h1 { margin: 0; font-size: 43px; line-height: 1.12; letter-spacing: -.035em; font-weight: 740; }
+.intro p { margin: 10px 0 0; color: #55514C; font-size: 22px; line-height: 1.4; }
+.intro a { color: var(--graphite); text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; font-weight: 650; }
+.intro a:focus-visible { outline: 3px solid rgba(233,58,1,.5); outline-offset: 3px; }
+.workspace { min-height: 0; display: grid; grid-template-columns: 350px minmax(0, 1fr); gap: 22px; }
+.panel { background: var(--paper); border: 1px solid rgba(25,25,25,.055); border-radius: 14px; box-shadow: var(--shadow); min-width: 0; min-height: 0; }
+.schema-panel { display: flex; flex-direction: column; padding: 25px 23px 20px; }
+.panel-heading { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 0 0 19px; }
+h2 { margin: 0; font-size: 25px; line-height: 1.2; letter-spacing: -.018em; font-weight: 700; }
+.panel-heading p, .editor-heading p { margin: 6px 0 0; color: var(--muted); font-size: 17px; line-height: 1.35; }
+.table-list { display: flex; flex-direction: column; gap: 5px; padding-top: 12px; overflow: auto; }
+.schema-table { border-bottom: 1px solid #EEEAE4; padding: 2px 0 8px; }
+.schema-table:last-child { border-bottom: 0; }
+.schema-table summary {
+  min-height: 47px;
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 6px;
+  font-size: 21px;
+  font-weight: 660;
+}
+.schema-table summary::-webkit-details-marker { display: none; }
+.schema-table summary::after { content: "+"; color: #9C948A; font-size: 24px; font-weight: 400; width: 22px; text-align: center; }
+.schema-table[open] summary::after { content: "−"; color: var(--accent); }
+.table-rowcount { color: #777168; font-size: 16px; font-weight: 500; margin-right: 5px; }
+.column-list { color: #56514B; font-size: 17px; line-height: 1.65; padding: 1px 5px 10px 11px; overflow-wrap: anywhere; }
+.column-name { display: inline; }
+.column-name + .column-name::before { content: " · "; color: #A49D93; }
+.schema-footer { margin-top: auto; border-top: 1px solid var(--line); padding-top: 17px; color: #5D5851; font-size: 17px; line-height: 1.35; }
+.schema-footer strong { color: var(--graphite); font-weight: 670; }
+.sql-workbench { min-width: 0; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.editor-panel, .results-panel { padding: 24px 24px 22px; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.editor-heading, .results-heading { display: flex; align-items: flex-start; justify-content: space-between; min-height: 60px; gap: 16px; }
+.editor-heading p { font-size: 17px; }
+.shortcut { color: #6A655D; font-size: 17px; line-height: 1.3; text-align: right; padding-top: 3px; white-space: nowrap; }
+.editor-area { flex: 1 1 auto; min-height: 0; margin-top: 12px; border: 1px solid #DCD6CE; border-radius: 10px; background: #FBFAF8; display: grid; grid-template-columns: 57px minmax(0, 1fr); overflow: hidden; transition: border-color 120ms ease, box-shadow 120ms ease; }
+.editor-area:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(233, 58, 1, .12); }
+.gutter { padding: 23px 14px 20px 0; background: #F4F1EC; border-right: 1px solid #E6E0D8; color: #9A9389; text-align: right; font: 25px/1.58 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; overflow: hidden; user-select: none; }
+#consulta {
+  display: block;
+  width: 100%; height: 100%; min-height: 340px; resize: none;
+  padding: 23px 23px 22px;
+  border: 0; outline: 0; background: transparent; color: #1D1B19;
+  font: 27px/1.58 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  letter-spacing: -.025em; tab-size: 4; white-space: pre; overflow: auto; caret-color: var(--accent);
+}
+#consulta::selection { background: rgba(233, 58, 1, .2); }
+.editor-footer { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding-top: 18px; }
+.editor-hint { min-width: 0; color: #68635C; font-size: 16px; line-height: 1.35; }
+#ejecutar {
+  min-width: 250px; min-height: 59px; padding: 0 24px; border: 0; border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  color: #fff; background: var(--accent); font-size: 20px; font-weight: 690; letter-spacing: -.01em;
+  cursor: pointer; box-shadow: 0 4px 10px rgba(233,58,1,.14); transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+#ejecutar:hover { background: #CC3200; box-shadow: 0 6px 15px rgba(233,58,1,.2); }
+#ejecutar:active { transform: translateY(1px); }
+#ejecutar:focus-visible { outline: 3px solid rgba(25,25,25,.65); outline-offset: 3px; }
+.button-enter { font-size: 16px; font-weight: 500; opacity: .88; white-space: nowrap; }
+.results-heading { align-items: baseline; min-height: 48px; }
+#estado-resultados { color: var(--muted); font-size: 17px; line-height: 1.35; margin: 0; white-space: nowrap; }
+#resultados {
+  flex: 1 1 auto; min-height: 0; margin-top: 12px; overflow: auto;
+  border: 1px solid #E4DED6; border-radius: 10px; background: #FFFEFC;
+}
+.empty-state { min-height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 11px; padding: 28px; color: #68635D; text-align: center; }
+.empty-state strong { color: #302D29; font-size: 21px; font-weight: 650; }
+.empty-state span { font-size: 17px; line-height: 1.45; max-width: 330px; }
+.empty-mark { width: 38px; height: 38px; border: 1.5px solid #D6CFC5; border-radius: 9px; position: relative; transform: rotate(-4deg); }
+.empty-mark::before, .empty-mark::after { content: ""; position: absolute; background: #D6CFC5; }
+.empty-mark::before { width: 19px; height: 1.5px; left: 8px; top: 12px; box-shadow: 0 8px 0 #D6CFC5; }
+.empty-mark::after { width: 1.5px; height: 22px; left: 13px; top: 7px; transform: rotate(32deg); opacity: .8; }
+.output-block { padding: 0; }
+.output-block + .output-block { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 10px; }
+.output-caption { margin: 0; padding: 12px 17px 10px; color: #55514B; font-size: 16px; line-height: 1.3; }
+.output-table-wrap { overflow: auto; }
+.output-table { width: 100%; border-collapse: collapse; table-layout: auto; }
+.output-table thead { position: sticky; top: 0; z-index: 1; }
+.output-table th { background: #F4F1EC; color: #514C46; border-top: 1px solid #E4DED6; border-bottom: 1px solid #E4DED6; padding: 13px 17px; text-align: left; font: 660 17px/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: nowrap; }
+.output-table td { padding: 12px 17px; border-bottom: 1px solid #EFEAE3; color: #282521; font-size: 21px; line-height: 1.3; overflow-wrap: anywhere; }
+.output-table tbody tr:last-child td { border-bottom: 0; }
+.output-table tbody tr:nth-child(even) { background: #FCFAF7; }
+.output-table td.number { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.output-table td.currency { color: var(--accent); font-weight: 720; font-size: 24px; }
+.output-table[data-rows="1"] td { padding-top: 17px; padding-bottom: 17px; font-size: 25px; }
+.output-table[data-rows="1"] td.currency { font-size: 31px; }
+.output-message { padding: 26px 21px; color: #47423D; font-size: 20px; line-height: 1.45; }
+.output-message strong { color: var(--success); font-weight: 660; }
+.error-message { margin: 16px; padding: 18px 19px; border-left: 4px solid var(--error); border-radius: 4px 9px 9px 4px; background: #FFF1EC; color: #42251F; font-size: 19px; line-height: 1.45; }
+.error-message strong { display: block; color: #842916; font-size: 17px; margin-bottom: 7px; }
+.error-message code { display: block; font: 18px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
+.bottomline { height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 56px; color: #6E6962; font-size: 16px; line-height: 1.3; }
+.bottomline .engine-credit { color: #777168; }
+.bottomline strong { font-weight: 650; color: #524D46; }
+@media (max-width: 1580px) {
+  .topbar { padding-inline: 34px; }
+  .page-main { padding-inline: 34px; }
+  .bottomline { padding-inline: 34px; }
+  .workspace { grid-template-columns: 310px minmax(0, 1fr); gap: 17px; }
+  .sql-workbench { gap: 15px; }
+  .editor-panel, .results-panel { padding-inline: 19px; }
+  #consulta { font-size: 23px; padding-inline: 17px; }
+  .gutter { font-size: 22px; }
+  #ejecutar { min-width: 218px; padding-inline: 18px; font-size: 18px; }
+}
+@media (max-height: 900px) {
+  .topbar { height: 80px; }
+  .page-main { height: calc(100% - 132px); padding-top: 4px; padding-bottom: 10px; grid-template-rows: 128px minmax(0,1fr); gap: 11px; }
+  .bottomline { height: 52px; }
+  h1 { font-size: 37px; }
+  .intro p { font-size: 19px; }
+  .schema-panel, .editor-panel, .results-panel { padding-top: 18px; padding-bottom: 17px; }
+  #consulta { min-height: 260px; font-size: 22px; }
+  .gutter { font-size: 21px; }
+  .output-table td { padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+}
+@media (max-width: 1180px) {
+  html, body { min-width: 360px; min-height: 100%; height: auto; overflow: auto; }
+  .topbar { height: 78px; padding: 0 22px; }
+  .watermark-safe-zone { display: none; }
+  .page-main { height: auto; min-height: calc(100vh - 130px); padding: 8px 22px 24px; grid-template-rows: auto auto; }
+  .intro { padding: 20px 0 24px; }
+  h1 { font-size: clamp(30px, 5vw, 40px); }
+  .intro p { font-size: 19px; }
+  .workspace { grid-template-columns: 1fr; }
+  .schema-panel { min-height: 300px; }
+  .sql-workbench { grid-template-columns: 1fr; }
+  .editor-panel, .results-panel { min-height: 600px; }
+  .bottomline { padding: 12px 22px; height: auto; }
+}
+</style>
+</head>
+<body data-estado="cargando">
+<header class="topbar">
+  <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>KIKO PALOMARES</span><span class="brand-divider" aria-hidden="true">/</span><span class="brand-section">LABORATORIO SQL</span></div>
+  <div class="watermark-safe-zone" aria-hidden="true"></div>
+</header>
+<main class="page-main">
+  <section class="intro" aria-labelledby="titulo-reto">
+    <div class="eyebrow">RETO 1</div>
+    <h1 id="titulo-reto">¿Cuál es el videojuego más caro?</h1>
+    <p>Empieza aquí, sigue <a href="retos.md">los diez ejercicios</a> o prueba cualquier consulta.</p>
+  </section>
+  <section class="workspace" aria-label="Laboratorio de consultas SQL">
+    <aside class="panel schema-panel" aria-label="Tablas disponibles">
+      <div class="panel-heading"><div><h2>Catálogo</h2><p>Esquema de la tienda</p></div></div>
+      <div id="esquema" class="table-list" aria-live="polite"></div>
+      <div id="resumen-esquema" class="schema-footer">Preparando la base local…</div>
+    </aside>
+    <section class="sql-workbench" aria-label="Editor y resultados">
+      <article class="panel editor-panel">
+        <header class="editor-heading">
+          <div><h2>Consulta SQL</h2><p>Escribe y ejecuta</p></div>
+          <div class="shortcut" aria-label="Atajo de teclado">Ctrl / ⌘ + Enter</div>
+        </header>
+        <div class="editor-area">
+          <div id="lineas" class="gutter" aria-hidden="true">1\n2\n3\n4\n5\n6\n7\n8\n9\n10</div>
+          <textarea id="consulta" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Consulta SQL" disabled></textarea>
+        </div>
+        <footer class="editor-footer">
+          <div id="estado-motor" class="editor-hint" role="status" aria-live="polite">Cargando SQLite…</div>
+          <button id="ejecutar" type="button" disabled>Ejecutar <span class="button-enter">Ctrl / ⌘ ↵</span></button>
+        </footer>
+      </article>
+      <article class="panel results-panel" aria-labelledby="titulo-resultados">
+        <header class="results-heading"><h2 id="titulo-resultados">Resultado</h2><p id="estado-resultados" role="status" aria-live="polite">Esperando la base de práctica…</p></header>
+        <div id="resultados" data-estado="idle" aria-live="polite" aria-atomic="false"></div>
+      </article>
+    </section>
+  </section>
+</main>
+<footer class="bottomline"><span><strong>Modo local</strong> · SQLite se ejecuta en este navegador</span><span class="engine-credit">Motor sql.js · licencia MIT</span></footer>
+<script type="application/json" id="seed-sql">@@SEED_SQL_JSON@@</script>
+<script>
+@@SQLJS_INLINE_BUNDLE@@
+</script>
+<script>
+(() => {
+  const INITIAL_QUERY = "SELECT titulo, precio_euros\nFROM videojuegos;";
+  const editor = document.getElementById("consulta");
+  const runButton = document.getElementById("ejecutar");
+  const resultRoot = document.getElementById("resultados");
+  const resultStatus = document.getElementById("estado-resultados");
+  const engineStatus = document.getElementById("estado-motor");
+  const gutter = document.getElementById("lineas");
+  const schemaRoot = document.getElementById("esquema");
+  const schemaSummary = document.getElementById("resumen-esquema");
+  let database = null;
+  let executedQuery = "";
+  let setupError = false;
+
+  const text = (tag, value, className) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    node.textContent = value;
+    return node;
+  };
+
+  function setEmptyState(title, detail) {
+    resultRoot.dataset.estado = "idle";
+    resultRoot.replaceChildren();
+    const box = document.createElement("div");
+    box.className = "empty-state";
+    box.append(text("span", "", "empty-mark"));
+    box.append(text("strong", title));
+    box.append(text("span", detail));
+    resultRoot.append(box);
+  }
+
+  function updateGutter() {
+    const lines = Math.max(10, editor.value.split("\n").length + 2);
+    gutter.textContent = Array.from({length: lines}, (_, i) => String(i + 1)).join("\n");
+  }
+
+  function getTableNames() {
+    const entries = database.exec("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name COLLATE NOCASE");
+    const names = entries[0]?.values.map(row => String(row[0])) || [];
+    const preferred = ["videojuegos", "clientes", "pedidos", "lineas_pedido"];
+    return names.sort((a, b) => {
+      const ai = preferred.indexOf(a.toLowerCase());
+      const bi = preferred.indexOf(b.toLowerCase());
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi) || a.localeCompare(b, "es");
+    });
+  }
+
+  function quoteIdentifier(name) {
+    return '"' + String(name).replaceAll('"', '""') + '"';
+  }
+
+  function populateSchema() {
+    schemaRoot.replaceChildren();
+    const names = getTableNames();
+    for (const name of names) {
+      const quoted = quoteIdentifier(name);
+      const schema = database.exec(`PRAGMA table_info(${quoted})`);
+      const columns = schema[0]?.values.map(row => String(row[1])) || [];
+      const countQuery = database.exec(`SELECT COUNT(*) FROM ${quoted}`);
+      const rowCount = Number(countQuery[0]?.values[0]?.[0] || 0);
+      const details = document.createElement("details");
+      details.className = "schema-table";
+      if (name.toLowerCase() === "videojuegos") details.open = true;
+      const summary = document.createElement("summary");
+      summary.append(text("span", name));
+      summary.append(text("span", `${rowCount} filas`, "table-rowcount"));
+      details.append(summary);
+      const columnList = document.createElement("div");
+      columnList.className = "column-list";
+      columns.forEach((column, index) => {
+        if (index) columnList.append(document.createTextNode(" · "));
+        columnList.append(text("span", column, "column-name"));
+      });
+      details.append(columnList);
+      schemaRoot.append(details);
+    }
+    const gameCountQuery = database.exec("SELECT COUNT(*) FROM videojuegos");
+    const gameCount = Number(gameCountQuery[0]?.values[0]?.[0] || 0);
+    schemaSummary.replaceChildren(text("strong", `${names.length} tablas`), document.createTextNode(` · ${gameCount} videojuegos`));
+  }
+
+  function formatCell(value, column) {
+    if (value === null || value === undefined) return "NULL";
+    if (typeof value === "number" && /(?:^|_)euros$/i.test(column)) {
+      return `${new Intl.NumberFormat("es-ES", {maximumFractionDigits: 2}).format(value)} €`;
+    }
+    return String(value);
+  }
+
+  function renderTable(result, index) {
+    const block = document.createElement("section");
+    block.className = "output-block";
+    const rowTotal = result.values.length;
+    block.append(text("p", `${rowTotal} ${rowTotal === 1 ? "fila devuelta" : "filas devueltas"}`, "output-caption"));
+    const wrap = document.createElement("div");
+    wrap.className = "output-table-wrap";
+    const table = document.createElement("table");
+    table.className = "output-table";
+    table.dataset.rows = String(rowTotal);
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    for (const column of result.columns) headerRow.append(text("th", column));
+    thead.append(headerRow);
+    table.append(thead);
+    const tbody = document.createElement("tbody");
+    for (const row of result.values) {
+      const tr = document.createElement("tr");
+      row.forEach((value, cellIndex) => {
+        const column = String(result.columns[cellIndex]);
+        const td = text("td", formatCell(value, column));
+        if (typeof value === "number") td.classList.add("number");
+        if (typeof value === "number" && /(?:^|_)euros$/i.test(column)) td.classList.add("currency");
+        tr.append(td);
+      });
+      tbody.append(tr);
+    }
+    table.append(tbody);
+    wrap.append(table);
+    block.append(wrap);
+    return block;
+  }
+
+  function showError(error) {
+    const message = error && error.message ? error.message : String(error);
+    resultRoot.dataset.estado = "error";
+    resultRoot.replaceChildren();
+    const box = document.createElement("div");
+    box.className = "error-message";
+    box.append(text("strong", "SQLite no pudo ejecutar esta consulta"));
+    box.append(text("code", message));
+    resultRoot.append(box);
+    resultStatus.textContent = "Revisa el nombre de la tabla o las columnas.";
+  }
+
+  function executeQuery() {
+    if (!database || setupError) return;
+    const query = editor.value.trim();
+    if (!query) {
+      showError(new Error("Escribe una consulta SQL antes de ejecutarla."));
+      return;
+    }
+    try {
+      const outputs = database.exec(query);
+      executedQuery = editor.value;
+      resultRoot.dataset.estado = "success";
+      resultRoot.replaceChildren();
+      if (outputs.length) {
+        outputs.forEach((output, index) => resultRoot.append(renderTable(output, index)));
+        const totalRows = outputs.reduce((sum, output) => sum + output.values.length, 0);
+        const totalSets = outputs.length;
+        resultStatus.textContent = `${totalRows} ${totalRows === 1 ? "fila" : "filas"} · ${totalSets} ${totalSets === 1 ? "resultado" : "resultados"}`;
+      } else {
+        const changed = Number(database.getRowsModified());
+        const message = document.createElement("div");
+        message.className = "output-message";
+        const success = text("strong", "Consulta ejecutada correctamente.");
+        message.append(success);
+        if (changed > 0) message.append(document.createTextNode(` ${changed} ${changed === 1 ? "fila afectada" : "filas afectadas"}.`));
+        resultRoot.append(message);
+        resultStatus.textContent = "Sin filas para mostrar.";
+      }
+    } catch (error) {
+      executedQuery = "";
+      showError(error);
+    }
+  }
+
+  editor.addEventListener("input", () => {
+    updateGutter();
+    if (editor.value !== executedQuery) {
+      resultStatus.textContent = "Pendiente de ejecutar";
+      setEmptyState("Consulta pendiente", "Pulsa Ejecutar para ver las filas que devuelve.");
+    }
+  });
+  editor.addEventListener("scroll", () => { gutter.scrollTop = editor.scrollTop; });
+  editor.addEventListener("keydown", event => {
+    if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+      event.preventDefault();
+      executeQuery();
+    }
+  });
+  runButton.addEventListener("click", executeQuery);
+
+  async function initialize() {
+    try {
+      const seedSql = JSON.parse(document.getElementById("seed-sql").textContent);
+      const SQL = await initSqlJs();
+      database = new SQL.Database();
+      database.exec(seedSql);
+      populateSchema();
+      editor.disabled = false;
+      runButton.disabled = false;
+      editor.value = INITIAL_QUERY;
+      updateGutter();
+      document.body.dataset.estado = "ready";
+      engineStatus.textContent = "Base lista · SQLite local";
+      resultStatus.textContent = "Catálogo inicial";
+      executeQuery();
+      editor.value = INITIAL_QUERY;
+      resultStatus.textContent = "Catálogo inicial";
+    } catch (error) {
+      setupError = true;
+      document.body.dataset.estado = "error";
+      engineStatus.textContent = "No se pudo cargar la base local.";
+      resultStatus.textContent = "Error al preparar el catálogo.";
+      showError(error);
+    }
+  }
+
+  window.labSql = { executeQuery, get database() { return database; } };
+  initialize();
+})();
+</script>
+<!--
+@@SQLJS_MIT_LICENSE@@
+-->
+</body>
+</html>

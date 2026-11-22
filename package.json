@@ -1,0 +1,13 @@
+{
+  "name": "laboratorio-sql-videojuegos",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "verify": "python3 scripts/verify.py"
+  },
+  "dependencies": {
+    "sql.js": "1.16.0"
+  }
+}
