@@ -134,7 +134,7 @@ LEFT JOIN pedidos AS p ON p.id = lp.pedido_id
 GROUP BY v.id, v.titulo
 ORDER BY facturacion_euros DESC, unidades_vendidas DESC, v.titulo ASC;
 
-SELECT COUNT(*) AS pedidos,
+SELECT COUNT(DISTINCT pedido_id) AS pedidos,
        SUM(unidades) AS unidades,
        SUM(unidades * precio_unitario_euros) AS ingresos_euros
 FROM lineas_pedido;

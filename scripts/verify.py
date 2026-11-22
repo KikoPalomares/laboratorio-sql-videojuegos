@@ -40,6 +40,7 @@ def verify_examples(connection: sqlite3.Connection, challenge: int, reference: d
     path = ROOT / "ejemplos" / f"reto-{challenge:02}.sql"
     count = 0
     found_solution = False
+    checked_sales_totals = False
     statement = ""
     for line in path.read_text(encoding="utf-8").splitlines(keepends=True):
         if not statement and (not line.strip() or line.lstrip().startswith("--")):
@@ -52,10 +53,19 @@ def verify_examples(connection: sqlite3.Connection, challenge: int, reference: d
         rows = [list(row) for row in result.fetchall()]
         if columns == reference["columnas"] and rows == reference["filas"]:
             found_solution = True
+        if challenge == 10 and columns == ["pedidos", "unidades", "ingresos_euros"]:
+            totals = connection.execute(
+                "SELECT (SELECT COUNT(*) FROM pedidos), SUM(unidades), "
+                "SUM(unidades * precio_unitario_euros) FROM lineas_pedido"
+            ).fetchone()
+            require(rows == [list(totals)], "El cierre debe distinguir pedidos, unidades e ingresos.")
+            checked_sales_totals = True
         count += 1
         statement = ""
     require(not statement.strip(), f"Consulta inconclusa en {path.name}.")
     require(found_solution, f"{path.name} debe incluir el resultado de referencia del reto.")
+    if challenge == 10:
+        require(checked_sales_totals, "Falta el resumen de pedidos, unidades e ingresos.")
     return count
 
 
