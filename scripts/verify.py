@@ -36,6 +36,29 @@ def matches(actual: object, expected: object) -> bool:
     return actual == expected
 
 
+def verify_examples(connection: sqlite3.Connection, challenge: int, reference: dict) -> int:
+    path = ROOT / "ejemplos" / f"reto-{challenge:02}.sql"
+    count = 0
+    found_solution = False
+    statement = ""
+    for line in path.read_text(encoding="utf-8").splitlines(keepends=True):
+        if not statement and (not line.strip() or line.lstrip().startswith("--")):
+            continue
+        statement += line
+        if not sqlite3.complete_statement(statement):
+            continue
+        result = connection.execute(statement)
+        columns = [column[0] for column in result.description or []]
+        rows = [list(row) for row in result.fetchall()]
+        if columns == reference["columnas"] and rows == reference["filas"]:
+            found_solution = True
+        count += 1
+        statement = ""
+    require(not statement.strip(), f"Consulta inconclusa en {path.name}.")
+    require(found_solution, f"{path.name} debe incluir el resultado de referencia del reto.")
+    return count
+
+
 def main() -> None:
     required_files = (
         "index.html",
@@ -77,8 +100,10 @@ def main() -> None:
     require(tuple(sorted(expected_by_id)) == tuple(range(1, 11)), "resultados.json debe cubrir los retos 1–10.")
 
     connection = sqlite3.connect(":memory:")
+    example_count = 0
     try:
         connection.executescript((ROOT / "tienda.sql").read_text(encoding="utf-8"))
+        connection.execute("PRAGMA query_only = ON")
         for reto in range(1, 11):
             reference = expected_by_id[reto]
             cursor = connection.execute(queries[reto])
@@ -91,11 +116,13 @@ def main() -> None:
                 for column_index, (actual, expected) in enumerate(zip(actual_row, expected_row), start=1):
                     require(matches(actual, expected),
                             f"Reto {reto}, fila {row_index}, columna {column_index}: {actual!r} != {expected!r}.")
-            print(f"Reto {reto}/10: {len(rows)} filas verificadas")
+            examples = verify_examples(connection, reto, reference)
+            example_count += examples
+            print(f"Reto {reto}/10 · {len(rows)} filas de referencia · {examples} ejemplos ejecutados")
     finally:
         connection.close()
 
-    print("OK: las diez soluciones coinciden con resultados.json.")
+    print(f"Verificación completa. Diez soluciones y {example_count} consultas del curso.")
 
 
 if __name__ == "__main__":

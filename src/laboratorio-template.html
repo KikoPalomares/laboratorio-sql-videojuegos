@@ -382,7 +382,16 @@ h2 { margin: 0; font-size: 25px; line-height: 1.2; letter-spacing: -.018em; font
       return;
     }
     try {
-      const outputs = database.exec(query);
+      const previousChanges = database.exec("SELECT total_changes()")[0].values[0][0];
+      const outputs = [];
+      for (const statement of database.iterateStatements(query)) {
+        const columns = statement.getColumnNames();
+        const values = [];
+        while (statement.step()) {
+          if (columns.length) values.push(statement.get());
+        }
+        if (columns.length) outputs.push({columns, values});
+      }
       executedQuery = editor.value;
       resultRoot.dataset.estado = "success";
       resultRoot.replaceChildren();
@@ -392,7 +401,7 @@ h2 { margin: 0; font-size: 25px; line-height: 1.2; letter-spacing: -.018em; font
         const totalSets = outputs.length;
         resultStatus.textContent = `${totalRows} ${totalRows === 1 ? "fila" : "filas"} · ${totalSets} ${totalSets === 1 ? "resultado" : "resultados"}`;
       } else {
-        const changed = Number(database.getRowsModified());
+        const changed = database.exec("SELECT total_changes()")[0].values[0][0] - previousChanges;
         const message = document.createElement("div");
         message.className = "output-message";
         const success = text("strong", "Consulta ejecutada correctamente.");
