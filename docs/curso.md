@@ -4,16 +4,20 @@ Abre el laboratorio y ten a mano los [diez retos](../retos.md). Si ya sabes util
 
 | Inicio | Capítulo | SQL que se ejecuta en pantalla |
 | --- | --- | --- |
-| 00:00 | 1. La primera consulta: el precio más alto | [Ver consultas](../ejemplos/reto-01.sql) |
-| 08:00 | 2. Filtrar por precio sin perder la frontera | [Ver consultas](../ejemplos/reto-02.sql) |
-| 16:30 | 3. Filtrar pedidos por un mes | [Ver consultas](../ejemplos/reto-03.sql) |
-| 25:00 | 4. Contar y promediar con cuidado | [Ver consultas](../ejemplos/reto-04.sql) |
-| 33:15 | 5. Sumar unidades por videojuego | [Ver consultas](../ejemplos/reto-05.sql) |
-| 42:00 | 6. Unir tablas para leer las ventas | [Ver consultas](../ejemplos/reto-06.sql) |
-| 51:45 | 7. Conservar filas con LEFT JOIN | [Ver consultas](../ejemplos/reto-07.sql) |
-| 1:00:15 | 8. Resumir las ventas por mes | [Ver consultas](../ejemplos/reto-08.sql) |
-| 1:09:45 | 9. Calcular el ticket medio por pedido | [Ver consultas](../ejemplos/reto-09.sql) |
-| 1:19:00 | 10. Clasificar el catálogo por ventas | [Ver consultas](../ejemplos/reto-10.sql) |
+| 00:40 | 1. La primera consulta: el precio más alto | [Ver consultas](../ejemplos/reto-01.sql) |
+| 07:59 | 2. Filtrar por precio sin perder la frontera | [Ver consultas](../ejemplos/reto-02.sql) |
+| 16:31 | 3. Filtrar pedidos por un mes | [Ver consultas](../ejemplos/reto-03.sql) |
+| 25:02 | 4. Contar y promediar con cuidado | [Ver consultas](../ejemplos/reto-04.sql) |
+| 33:19 | 5. Sumar unidades por videojuego | [Ver consultas](../ejemplos/reto-05.sql) |
+| 42:05 | 6. Unir tablas para leer las ventas | [Ver consultas](../ejemplos/reto-06.sql) |
+| 51:51 | 7. Conservar filas con LEFT JOIN | [Ver consultas](../ejemplos/reto-07.sql) |
+| 1:00:23 | 8. Resumir las ventas por mes | [Ver consultas](../ejemplos/reto-08.sql) |
+| 1:09:20 | 9. Calcular el ticket medio por pedido | [Ver consultas](../ejemplos/reto-09.sql) |
+| 1:18:24 | 10. Clasificar el catálogo por ventas | [Ver consultas](../ejemplos/reto-10.sql) |
+
+La guía de descarga empieza en el 00:13, justo antes de la primera consulta.
+
+Para practicar con los empates, las tres fechas o el valor `NULL`, copia el bloque completo desde `WITH` hasta el punto y coma. Esas filas de ejemplo sólo existen dentro de esa consulta.
 
 ## Te toca a ti
 

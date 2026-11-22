@@ -22,6 +22,13 @@ FROM videojuegos;
 SELECT MIN(precio_euros) AS precio_minimo, MAX(precio_euros) AS precio_maximo
 FROM videojuegos;
 
+-- Solución de la práctica: las cuatro medidas en una sola fila
+SELECT COUNT(*) AS juegos,
+       ROUND(AVG(precio_euros), 2) AS media_euros,
+       MIN(precio_euros) AS minimo_euros,
+       MAX(precio_euros) AS maximo_euros
+FROM videojuegos;
+
 -- 5. Qué significa un valor nulo
 SELECT COUNT(*) AS filas, COUNT(precio_euros) AS precios_con_valor
 FROM videojuegos;
