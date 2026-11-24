@@ -39,15 +39,15 @@ GROUP BY p.id;
 -- 4. Pausa: calcula un ticket
 SELECT pedido_id, unidades, precio_unitario_euros
 FROM lineas_pedido
-WHERE pedido_id = 1001
+WHERE pedido_id = 1004
 ORDER BY id;
 
--- 5. Solución: ochenta y cinco euros
+-- 5. Solución del pedido 1004. Tres copias a 20 € y una a 50 € suman 110 €.
 SELECT p.id AS pedido_id,
        SUM(lp.unidades * lp.precio_unitario_euros) AS total_euros
 FROM pedidos AS p
 JOIN lineas_pedido AS lp ON lp.pedido_id = p.id
-WHERE p.id = 1001
+WHERE p.id = 1004
 GROUP BY p.id;
 
 SELECT COUNT(*) AS pedidos_con_total

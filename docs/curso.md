@@ -5,15 +5,15 @@ Abre el laboratorio y ten a mano los [diez retos](../retos.md). Si ya sabes util
 | Inicio | Capítulo | SQL que se ejecuta en pantalla |
 | --- | --- | --- |
 | 00:40 | 1. La primera consulta: el precio más alto | [Ver consultas](../ejemplos/reto-01.sql) |
-| 07:59 | 2. Filtrar por precio sin perder la frontera | [Ver consultas](../ejemplos/reto-02.sql) |
-| 16:31 | 3. Filtrar pedidos por un mes | [Ver consultas](../ejemplos/reto-03.sql) |
-| 25:02 | 4. Contar y promediar con cuidado | [Ver consultas](../ejemplos/reto-04.sql) |
-| 33:19 | 5. Sumar unidades por videojuego | [Ver consultas](../ejemplos/reto-05.sql) |
-| 42:05 | 6. Unir tablas para leer las ventas | [Ver consultas](../ejemplos/reto-06.sql) |
-| 51:51 | 7. Conservar filas con LEFT JOIN | [Ver consultas](../ejemplos/reto-07.sql) |
-| 1:00:23 | 8. Resumir las ventas por mes | [Ver consultas](../ejemplos/reto-08.sql) |
-| 1:09:20 | 9. Calcular el ticket medio por pedido | [Ver consultas](../ejemplos/reto-09.sql) |
-| 1:18:24 | 10. Clasificar el catálogo por ventas | [Ver consultas](../ejemplos/reto-10.sql) |
+| 07:23 | 2. Filtrar por precio sin perder la frontera | [Ver consultas](../ejemplos/reto-02.sql) |
+| 15:35 | 3. Filtrar pedidos por un mes | [Ver consultas](../ejemplos/reto-03.sql) |
+| 23:42 | 4. Contar y promediar con cuidado | [Ver consultas](../ejemplos/reto-04.sql) |
+| 31:39 | 5. Sumar unidades por videojuego | [Ver consultas](../ejemplos/reto-05.sql) |
+| 39:57 | 6. Unir tablas para leer las ventas | [Ver consultas](../ejemplos/reto-06.sql) |
+| 49:04 | 7. Conservar filas con LEFT JOIN | [Ver consultas](../ejemplos/reto-07.sql) |
+| 57:14 | 8. Resumir las ventas por mes | [Ver consultas](../ejemplos/reto-08.sql) |
+| 1:05:27 | 9. Calcular el ticket medio por pedido | [Ver consultas](../ejemplos/reto-09.sql) |
+| 1:13:46 | 10. Clasificar el catálogo por ventas | [Ver consultas](../ejemplos/reto-10.sql) |
 
 La guía de descarga empieza en el 00:13, justo antes de la primera consulta.
 
@@ -21,7 +21,7 @@ Para practicar con los empates, las tres fechas o el valor `NULL`, copia el bloq
 
 ## Te toca a ti
 
-Estas son las dos prácticas que aparecen durante cada capítulo. Intenta escribir la consulta, predice qué filas obtendrás y pulsa **Ejecutar**. Si necesitas más tiempo, pausa el vídeo. Los archivos SQL de la tabla incluyen los pasos intermedios y las soluciones de las demostraciones.
+Cada capítulo tiene dos prácticas. La consigna permanece diez segundos en pantalla. Pausa el vídeo, escribe la consulta y pulsa **Ejecutar**. Cuando tengas tu resultado, reanuda el vídeo y compáralo con la solución. Los archivos SQL de la tabla incluyen los pasos intermedios y las soluciones.
 
 
 ### Reto 1. La primera consulta: el precio más alto
@@ -66,7 +66,7 @@ Estas son las dos prácticas que aparecen durante cada capítulo. Intenta escrib
 
 ### Reto 9. Calcular el ticket medio por pedido
 
-- Calcula el importe total del pedido 1001 a partir de sus líneas de venta.
+- Calcula el importe total del pedido 1004 a partir de sus líneas de venta.
 - Calcula el ticket medio por pedido para toda la tienda, redondeado a dos decimales.
 
 ### Reto 10. Clasificar el catálogo por ventas

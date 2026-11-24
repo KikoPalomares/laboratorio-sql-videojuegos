@@ -38,7 +38,7 @@ Todos los datos son ficticios. Resuelve los retos en orden y compara tus consult
 
 ## Reto 9
 
-¿Cuál es el ticket medio por pedido, contando cada pedido una sola vez?
+¿Cuál es el importe medio de un pedido en esta tienda? Cuenta cada pedido una sola vez.
 
 ## Reto 10
 

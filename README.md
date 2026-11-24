@@ -10,7 +10,7 @@ El laboratorio carga la base de datos en el navegador. No hace falta instalar SQ
 
 Modifica el texto del editor para probar una consulta. Pulsa **Ejecutar** o usa **Ctrl/⌘ + Intro**. El resultado aparece junto al editor y se actualiza cada vez que vuelves a ejecutar.
 
-## Seguir la clase de 90 minutos
+## Seguir el curso
 
 El [recorrido por capítulos](docs/curso.md) reúne los minutos de inicio, las veinte prácticas «Te toca a ti» y las consultas que se ven en pantalla. Abre el reto que estés viendo y ejecuta las consultas una a una.
 
